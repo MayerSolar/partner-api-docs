@@ -3,9 +3,9 @@
   "theme": "mint",
   "name": "Mayer Partner API",
   "colors": {
-    "primary": "#045196",
+    "primary": "#458bca",
     "light": "#045196",
-    "dark": "#458bca"
+    "dark": "#045196"
   },
   "favicon": "/favicon.png",
   "navigation": {
