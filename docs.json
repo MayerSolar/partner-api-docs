@@ -1,13 +1,13 @@
 {
   "$schema": "https://mintlify.com/docs.json",
-  "theme": "mint",
-  "name": "Mint Starter Kit",
+  "theme": "willow",
+  "name": "Mayer Partner API",
   "colors": {
-    "primary": "#ffdb6a",
+    "primary": "#045196",
     "light": "#045196",
-    "dark": "#458bca"
+    "dark": "#045196"
   },
-  "favicon": "/favicon.svg",
+  "favicon": "/favicon.png",
   "navigation": {
     "tabs": [
       {
