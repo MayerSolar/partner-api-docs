@@ -1,0 +1,40 @@
+---
+title: "FAQ"
+description: "Frequently Asked Questions about the Mayer Partner API"
+---
+
+## Where can I get my API token?
+
+Tokens are provided manually by Mayer's Solutions Architect. Visit [Obtain an API Token](/essentials/get-access) to see how to apply to obtain an API token.
+
+## How long does my token stay valid?
+
+Tokens will remain valid unless revoked. You'll be notified via email if any token revokations happen. This will only happen if we detect that your API token may be leaked or accidentially published to a public Git repository.
+
+## Is there a rate limit on API usage?
+
+Currently, there is no enforced rate limit on API usage. However, if we determine that there is an abuse of services, your API token may be revoked or limited. Please be considerate when sending requests to the API, as the underlying data providers may take time to generate a response.
+
+If you're polling frequently for changes, please consult with Mayer for best practices.
+
+<Info>
+  The data available in the API is delayed by two hours. Polling frequently may not provide faster updates.
+</Info>
+
+## Is there a sandbox or test environment?
+
+Due to the **read-only** nature of the API, there is no sandbox or test environment.
+
+## Can I filter by date or stage?
+
+Not at this time. If you'd like this feature to be added to our API, please send us an email and we'll add it into consideration.
+
+## What is the files endpoint for?
+
+<Warning>
+  Requesting too many files at the same time may incur rate-limits from HubSpot and cause requests to fail.
+</Warning>
+
+For any files stored or attached to a deal, they are returned as File IDs. These identifiers can be used to request a signed URL to access the file using the file endpoint. 
+
+This signed URL is temporary and allows you to download a copy of the file. The file endpoint also includes metadata about the file like file name, extension, size, and date of expiry (for the signed URL).
