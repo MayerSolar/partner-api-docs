@@ -25,10 +25,9 @@
             ]
           },
           {
-            "group": "Customization",
+            "group": "Onboarding",
             "pages": [
-              "essentials/settings",
-              "essentials/navigation"
+              "essentials/get-access"
             ]
           }
         ]
