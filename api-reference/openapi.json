@@ -1,94 +1,106 @@
 {
-  "openapi": "3.1.0",
+  "openapi": "3.0.1",
   "info": {
-    "title": "OpenAPI Plant Store",
-    "description": "A sample API that uses a plant store as an example to demonstrate features in the OpenAPI specification",
-    "license": {
-      "name": "MIT"
+    "title": "Mayer Partner API",
+    "description": "This API allows partners of Mayer Solar LLC to integrate solar data within their own CRM and view trends and analytics.",
+    "termsOfService": "https://mayerex.com/api-terms",
+    "contact": {
+      "name": "Sarmad Wahab",
+      "url": "https://mayerex.com/",
+      "email": "sarmad.wahab@mayersolar.com"
     },
-    "version": "1.0.0"
+    "license": {
+      "name": "MIT License",
+      "url": "https://opensource.org/licenses/MIT"
+    },
+    "version": "1.0"
   },
   "servers": [
     {
-      "url": "http://sandbox.mintlify.com"
-    }
-  ],
-  "security": [
-    {
-      "bearerAuth": []
+      "url": "https://api.mayerex.com/",
+      "description": "Mayer Production"
     }
   ],
   "paths": {
-    "/plants": {
+    "/api/deals": {
       "get": {
-        "description": "Returns all plants from the system that the user has access to",
+        "tags": [
+          "Deals"
+        ],
+        "summary": "List Deals",
+        "description": "This endpoint fetches a paginated list of deals.",
+        "operationId": "GetDeals",
         "parameters": [
           {
-            "name": "limit",
+            "name": "partner",
             "in": "query",
-            "description": "The maximum number of results to return",
+            "description": "This property is for internal use only and will not work for Partners.",
             "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "description": "The page number to fetch.",
+            "schema": {
+              "maximum": 2147483647,
+              "minimum": 1,
               "type": "integer",
-              "format": "int32"
+              "format": "int32",
+              "default": 1
+            }
+          },
+          {
+            "name": "size",
+            "in": "query",
+            "description": "The number of records to fetch.",
+            "schema": {
+              "maximum": 25,
+              "minimum": 1,
+              "type": "integer",
+              "format": "int32",
+              "default": 10
             }
           }
         ],
         "responses": {
           "200": {
-            "description": "Plant response",
+            "description": "OK",
             "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaginatedPartnerDeals"
+                }
+              },
               "application/json": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/Plant"
-                  }
+                  "$ref": "#/components/schemas/PaginatedPartnerDeals"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaginatedPartnerDeals"
                 }
               }
             }
           },
-          "400": {
-            "description": "Unexpected error",
+          "401": {
+            "description": "Unauthorized",
             "content": {
-              "application/json": {
+              "text/plain": {
                 "schema": {
-                  "$ref": "#/components/schemas/Error"
+                  "$ref": "#/components/schemas/ProblemDetails"
                 }
-              }
-            }
-          }
-        }
-      },
-      "post": {
-        "description": "Creates a new plant in the store",
-        "requestBody": {
-          "description": "Plant to add to the store",
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/NewPlant"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "description": "plant response",
-            "content": {
+              },
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Plant"
+                  "$ref": "#/components/schemas/ProblemDetails"
                 }
-              }
-            }
-          },
-          "400": {
-            "description": "unexpected error",
-            "content": {
-              "application/json": {
+              },
+              "text/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Error"
+                  "$ref": "#/components/schemas/ProblemDetails"
                 }
               }
             }
@@ -96,14 +108,19 @@
         }
       }
     },
-    "/plants/{id}": {
-      "delete": {
-        "description": "Deletes a single plant based on the ID supplied",
+    "/api/deals/{id}": {
+      "get": {
+        "tags": [
+          "Deals"
+        ],
+        "summary": "Get Deal by ID",
+        "description": "This endpoint fetches an individual deal by ID, and returns a Deal object containing all the information about a deal.",
+        "operationId": "GetDeal",
         "parameters": [
           {
             "name": "id",
             "in": "path",
-            "description": "ID of plant to delete",
+            "description": "The ID of the deal",
             "required": true,
             "schema": {
               "type": "integer",
@@ -112,16 +129,145 @@
           }
         ],
         "responses": {
-          "204": {
-            "description": "Plant deleted",
-            "content": {}
-          },
-          "400": {
-            "description": "unexpected error",
+          "200": {
+            "description": "OK",
             "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/PartnerDeal"
+                }
+              },
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Error"
+                  "$ref": "#/components/schemas/PartnerDeal"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PartnerDeal"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/files/{id}": {
+      "get": {
+        "tags": [
+          "Files"
+        ],
+        "summary": "Get File by ID",
+        "description": "This endpoint fetches an individual file by ID, and returns a signed URL to access the file.",
+        "operationId": "GetFile",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The ID of the file",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/FileSignedURL"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FileSignedURL"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FileSignedURL"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
                 }
               }
             }
@@ -130,88 +276,727 @@
       }
     }
   },
-  "webhooks": {
-    "/plant/webhook": {
-      "post": {
-        "description": "Information about a new plant added to the store",
-        "requestBody": {
-          "description": "Plant added to the store",
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/NewPlant"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Return a 200 status to indicate that the data was received successfully"
-          }
-        }
-      }
-    }
-  },
   "components": {
     "schemas": {
-      "Plant": {
-        "required": [
-          "name"
-        ],
+      "FileSignedURL": {
         "type": "object",
         "properties": {
-          "name": {
-            "description": "The name of the plant",
-            "type": "string"
+          "url": {
+            "type": "string",
+            "nullable": true
           },
-          "tag": {
-            "description": "Tag to specify the type",
-            "type": "string"
+          "expiresAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "extension": {
+            "type": "string",
+            "nullable": true
+          },
+          "type": {
+            "type": "string",
+            "nullable": true
+          },
+          "size": {
+            "type": "integer",
+            "format": "int64"
           }
         }
       },
-      "NewPlant": {
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/Plant"
-          },
-          {
-            "required": [
-              "id"
-            ],
-            "type": "object",
-            "properties": {
-              "id": {
-                "description": "Identification number of the plant",
-                "type": "integer",
-                "format": "int64"
-              }
-            }
-          }
-        ]
-      },
-      "Error": {
+      "PaginatedPartnerDeals": {
         "required": [
-          "error",
-          "message"
+          "page",
+          "count",
+          "pages",
+          "deals"
         ],
         "type": "object",
         "properties": {
-          "error": {
+          "page": {
             "type": "integer",
             "format": "int32"
           },
-          "message": {
-            "type": "string"
+          "count": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "pages": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "deals": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PartnerDeal"
+            },
+            "nullable": true
+          }
+        }
+      },
+      "PartnerDeal": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "owner": {
+            "$ref": "#/components/schemas/PartnerOwner"
+          },
+          "projectManager": {
+            "$ref": "#/components/schemas/PartnerOwner"
+          },
+          "postInstallEngineer": {
+            "$ref": "#/components/schemas/PartnerOwner"
+          },
+          "ixCoordinator": {
+            "$ref": "#/components/schemas/PartnerOwner"
+          },
+          "permitCoordinator": {
+            "$ref": "#/components/schemas/PartnerOwner"
+          },
+          "adderCost": {
+            "type": "number",
+            "description": "The cost of the adders",
+            "format": "double",
+            "nullable": true
+          },
+          "adderPpw": {
+            "type": "string",
+            "nullable": true
+          },
+          "adders": {
+            "type": "string",
+            "description": "Single-line text of the adders",
+            "nullable": true
+          },
+          "additionalComments": {
+            "type": "string",
+            "nullable": true
+          },
+          "amount": {
+            "type": "number",
+            "description": "The deal amount",
+            "format": "double",
+            "nullable": true
+          },
+          "auroraProjectId": {
+            "type": "string",
+            "description": "The ID of the project in Aurora",
+            "nullable": true
+          },
+          "basePpw": {
+            "type": "number",
+            "description": "The base PPW",
+            "format": "double",
+            "nullable": true
+          },
+          "battery": {
+            "type": "string",
+            "description": "The name of the battery used",
+            "nullable": true
+          },
+          "battery1": {
+            "type": "string",
+            "description": "Y/N if deal has a battery",
+            "nullable": true
+          },
+          "cadCompleted": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "cadRequested": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "changesToAdders": {
+            "type": "string",
+            "nullable": true
+          },
+          "city": {
+            "type": "string",
+            "nullable": true
+          },
+          "closerName": {
+            "type": "string",
+            "nullable": true
+          },
+          "coordinates": {
+            "type": "string",
+            "nullable": true
+          },
+          "createdate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "dateOfInstall": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "daysToClose": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "dealer": {
+            "type": "string",
+            "description": "The Dealer that closed the deal",
+            "nullable": true
+          },
+          "dealname": {
+            "type": "string",
+            "description": "The deal name",
+            "nullable": true
+          },
+          "dealStageId": {
+            "type": "string",
+            "description": "The ID of the deal stage",
+            "nullable": true
+          },
+          "dealStageLabel": {
+            "type": "string",
+            "description": "The current deal stage",
+            "nullable": true
+          },
+          "electricalPhotos": {
+            "type": "string",
+            "nullable": true
+          },
+          "electricalStatus": {
+            "type": "string",
+            "nullable": true
+          },
+          "enerfloProjectId": {
+            "type": "string",
+            "nullable": true
+          },
+          "engineeringCompleted": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "engineeringLink": {
+            "type": "string",
+            "nullable": true
+          },
+          "engineeringRequested": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "expectedPermitDeliveryDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "firstName": {
+            "type": "string",
+            "nullable": true
+          },
+          "fundingSubmitted": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "glassStatus": {
+            "type": "string",
+            "nullable": true
+          },
+          "hicAgreement": {
+            "type": "string",
+            "nullable": true
+          },
+          "hoa": {
+            "type": "string",
+            "nullable": true
+          },
+          "hoaApprovedDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "hoaEmail": {
+            "type": "string",
+            "nullable": true
+          },
+          "hoaName": {
+            "type": "string",
+            "nullable": true
+          },
+          "hoaNumber": {
+            "type": "string",
+            "nullable": true
+          },
+          "hsAcv": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "hsCreatedate": {
+            "type": "string",
+            "description": "Date the deal was created on",
+            "format": "date-time",
+            "nullable": true
+          },
+          "hsV2TimeInCurrentStage": {
+            "type": "string",
+            "description": "Time the deal has been in the current stage",
+            "format": "date-time",
+            "nullable": true
+          },
+          "inspectionNotes": {
+            "type": "string",
+            "nullable": true
+          },
+          "inspectionRequested": {
+            "type": "string",
+            "description": "Date when inspection was requested",
+            "format": "date-time",
+            "nullable": true
+          },
+          "inspectionRequired": {
+            "type": "string",
+            "description": "Y/N if inspection is required",
+            "nullable": true
+          },
+          "inspectionResults": {
+            "type": "string",
+            "nullable": true
+          },
+          "installComplete": {
+            "type": "string",
+            "description": "Date of when install was completed",
+            "format": "date-time",
+            "nullable": true
+          },
+          "installCompleted": {
+            "type": "string",
+            "description": "Y/N if install has been completed",
+            "nullable": true
+          },
+          "installNotes": {
+            "type": "string",
+            "nullable": true
+          },
+          "installPhotoGoogleDrive": {
+            "type": "string",
+            "nullable": true
+          },
+          "installationdate": {
+            "type": "string",
+            "nullable": true
+          },
+          "installedScheduled": {
+            "type": "string",
+            "description": "The day install is scheduled on",
+            "format": "date-time",
+            "nullable": true
+          },
+          "installedsystem": {
+            "type": "string",
+            "nullable": true
+          },
+          "interconnectionVerification": {
+            "type": "string",
+            "nullable": true
+          },
+          "inverterType": {
+            "type": "string",
+            "nullable": true
+          },
+          "ixNotes": {
+            "type": "string",
+            "nullable": true
+          },
+          "kwstc": {
+            "type": "string",
+            "nullable": true
+          },
+          "lastName": {
+            "type": "string",
+            "nullable": true
+          },
+          "latitude": {
+            "type": "string",
+            "nullable": true
+          },
+          "lender": {
+            "type": "string",
+            "nullable": true
+          },
+          "loanAmount": {
+            "type": "string",
+            "nullable": true
+          },
+          "locality": {
+            "type": "string",
+            "nullable": true
+          },
+          "longitude": {
+            "type": "string",
+            "nullable": true
+          },
+          "m2Approved": {
+            "type": "string",
+            "nullable": true
+          },
+          "moduleType": {
+            "type": "string",
+            "nullable": true
+          },
+          "monitoringSetUp": {
+            "type": "string",
+            "nullable": true
+          },
+          "nameOnUb": {
+            "type": "string",
+            "nullable": true
+          },
+          "notes": {
+            "type": "string",
+            "nullable": true
+          },
+          "notesLastUpdated": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "notesNextActivityDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "ntpApproved": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "ntpRequested": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "numAssociatedContacts": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "numContactedNotes": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "numNotes": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "numberOfBatteries": {
+            "type": "string",
+            "nullable": true
+          },
+          "numberOfInverters": {
+            "type": "string",
+            "nullable": true
+          },
+          "numberOfModules": {
+            "type": "string",
+            "nullable": true
+          },
+          "offsetperc": {
+            "type": "string",
+            "nullable": true
+          },
+          "opensolarProjectId": {
+            "type": "string",
+            "nullable": true
+          },
+          "outstandingItems": {
+            "type": "string",
+            "nullable": true
+          },
+          "ownerEmailLabel": {
+            "type": "string",
+            "nullable": true
+          },
+          "permitNotes": {
+            "type": "string",
+            "nullable": true
+          },
+          "permitReceived": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "permitRequired": {
+            "type": "string",
+            "nullable": true
+          },
+          "permitSubmitted": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "pipeline": {
+            "type": "string",
+            "nullable": true
+          },
+          "pipelineLabel": {
+            "type": "string",
+            "nullable": true
+          },
+          "plansetMatchesAsBuilt": {
+            "type": "string",
+            "nullable": true
+          },
+          "postInstallPm": {
+            "type": "integer",
+            "format": "int64",
+            "nullable": true
+          },
+          "postcode": {
+            "type": "string",
+            "nullable": true
+          },
+          "preliminaryApproved": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "preliminaryApprovedNeeded": {
+            "type": "string",
+            "nullable": true
+          },
+          "preliminaryRequest": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "price": {
+            "type": "string",
+            "nullable": true
+          },
+          "primaryPhone": {
+            "type": "string",
+            "nullable": true
+          },
+          "projectaddress": {
+            "type": "string",
+            "nullable": true
+          },
+          "proposalLink": {
+            "type": "string",
+            "nullable": true
+          },
+          "pto": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "reInspectionRequested": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "reInspectionResults": {
+            "type": "string",
+            "nullable": true
+          },
+          "reInstallScheduled": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "reSignDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "reSignHic": {
+            "type": "string",
+            "nullable": true
+          },
+          "redline": {
+            "type": "string",
+            "nullable": true
+          },
+          "resetLink": {
+            "type": "string",
+            "nullable": true
+          },
+          "roofType": {
+            "type": "string",
+            "nullable": true
+          },
+          "rtrStatus": {
+            "type": "string",
+            "nullable": true
+          },
+          "scopeOfWorkPacket": {
+            "type": "string",
+            "nullable": true
+          },
+          "setterName": {
+            "type": "string",
+            "nullable": true
+          },
+          "siteSurveyCompleted": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "siteSurveyFolderLink": {
+            "type": "string",
+            "nullable": true
+          },
+          "siteSurveyLink": {
+            "type": "string",
+            "nullable": true
+          },
+          "siteSurveyRequested": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "soloAdders": {
+            "type": "string",
+            "nullable": true
+          },
+          "state": {
+            "type": "string",
+            "nullable": true
+          },
+          "streetAddress": {
+            "type": "string",
+            "nullable": true
+          },
+          "systemSize": {
+            "type": "string",
+            "nullable": true
+          },
+          "systemSizeInt": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "totalPpw": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "utilityName": {
+            "type": "string",
+            "nullable": true
+          },
+          "zipCode": {
+            "type": "string",
+            "nullable": true
+          },
+          "installPhoto": {
+            "type": "string",
+            "nullable": true
+          },
+          "redesignCompleteDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          }
+        }
+      },
+      "PartnerOwner": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "userId": {
+            "type": "integer",
+            "format": "int64",
+            "nullable": true
+          },
+          "email": {
+            "type": "string",
+            "nullable": true
+          },
+          "firstName": {
+            "type": "string",
+            "nullable": true
+          },
+          "lastName": {
+            "type": "string",
+            "nullable": true
+          },
+          "teams": {
+            "type": "string",
+            "nullable": true
+          },
+          "hubspotTeamId": {
+            "type": "string",
+            "nullable": true
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          }
+        },
+        "nullable": true
+      },
+      "ProblemDetails": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "nullable": true
+          },
+          "title": {
+            "type": "string",
+            "nullable": true
+          },
+          "status": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "detail": {
+            "type": "string",
+            "nullable": true
+          },
+          "instance": {
+            "type": "string",
+            "nullable": true
           }
         }
       }
     },
     "securitySchemes": {
-      "bearerAuth": {
-        "type": "http",
-        "scheme": "bearer"
+      "Bearer": {
+        "type": "apiKey",
+        "name": "Authorization",
+        "in": "header"
       }
     }
-  }
+  },
+  "tags": [
+    {
+      "name": "Deals"
+    },
+    {
+      "name": "Files"
+    }
+  ]
 }
