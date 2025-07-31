@@ -13,9 +13,7 @@ If you don't have an API token already, please visit [Obtain an API Token](/esse
 
 ### Step 2: Write your first API call
 
-<RequestExample>
-
-```c# Program.cs
+```c#
 string mayerApiToken = "88888888888888888888";
 var client = new HttpClient();
 
@@ -27,8 +25,6 @@ var deal = await client.GetFromJsonAsync<Deal>("https://api.mayerex.com/api/deal
 
 Console.WriteLine(deal.DealName); // Success!
 ```
-
-</RequestExample>
 
 ### Step 3: Go live
 
