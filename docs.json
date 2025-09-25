@@ -14,7 +14,19 @@
   "navigation": {
     "tabs": [
       {
-        "tab": "Guides",
+        "tab": "Knowledge Base",
+        "groups": [
+          {
+            "group": "Information",
+            "pages": [
+              "knowledge-base/index",
+              "knowledge-base/ProductOfferings"
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "API Guides",
         "groups": [
           {
             "group": "Getting started",
